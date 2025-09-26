@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScreenTask Custom Client</title>
+  <!-- Made by FolDoma and some ChatGPT -->
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000000;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      width: 100dvw;
+    }
+    .controls {
+      margin: 1rem 0;
+      display: flex;
+      gap: 0.5rem;
+    }
+    select, button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      cursor: pointer;
+      background: #3a8ef6;
+      color: white;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #256adf;
+    }
+    #screen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80%;
+      background: black;
+    }
+    #screen img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="controls">
+    <select id="serverIp" class="ip-selector">
+      <option value="http://193.225.219.205:7070/">303</option>
+      <option value="http://10.0.117.20:7070/">117</option>
+    </select>
+    <button id="fullscreenBtn">Fullscreen</button>
+  </div>
+
+  <div id="screen">
+    <img id="viewer" src="" alt="Waiting for connection...">
+  </div>
+
+  <script>
+    let timer = null;
+    const refreshInterval = 500;
+    let baseUrl = ''
+    const selectElement = document.querySelector(".ip-selector");
+    
+    const viewer = document.getElementById("viewer");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    
+    function startStream() {
+      let baseUrl = document.getElementById("serverIp").value;
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        viewer.src = `${baseUrl}/ScreenTask.jpg?rand=${Math.random()}`;
+      }, refreshInterval);
+    }
+
+    fullscreenBtn.onclick = () => {
+      const screenDiv = document.getElementById("screen");
+      if (screenDiv.requestFullscreen) {
+        screenDiv.requestFullscreen();
+      } else if (screenDiv.webkitRequestFullscreen) {
+        screenDiv.webkitRequestFullscreen();
+      } else if (screenDiv.msRequestFullscreen) {
+        screenDiv.msRequestFullscreen();
+      }
+    };
+
+    window.addEventListener("load", (event) => {
+      startStream();
+    });
+
+    selectElement.addEventListener("change", (event) => {
+      startStream();
+    });
+  </script>
+</body>
+
+</html>
